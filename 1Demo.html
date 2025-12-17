@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAPO</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      background: #fff;
+      color: #111;
+    }
+
+    /* —— 首页容器（你之后把你的布局搬到这里） —— */
+    .page {
+      width: 100%;
+      min-height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 示例：顶部大图（用 data-bg 注入） */
+    .hero {
+      width: 100%;
+      height: 55vh;
+      background: #eee;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* 示例：Logo（用 data-src 注入） */
+    .logo {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 160px;
+      height: auto;
+    }
+
+    /* 示例：5 个画廊入口 */
+    .nav {
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      font-size: 16px;
+      text-decoration: underline;
+      color: #0b57d0;
+    }
+
+    /* 示例：底部小图条（用 data-src 注入） */
+    .thumbs {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .thumbs img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      background: #f3f3f3;
+      display: block;
+    }
+
+    /* 资源加载失败时显示边框，方便你排查 */
+    .asset-missing {
+      outline: 2px dashed #ff3b30;
+    }
+
+    @media (max-width: 900px) {
+      .hero { height: 45vh; }
+      .thumbs { grid-template-columns: repeat(2, 1fr); }
+      .thumbs img { height: 110px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ✅ 示例：logo（把 logo.png 换成你真实文件名） -->
+    <img class="logo" data-src="headline.png" alt="DAPO Logo" />
+
+    <!-- ✅ 示例：hero 背景（把 back.png 换成你真实文件名） -->
+    <div class="hero" data-bg="back.png"></div>
+
+    <!-- ✅ 示例：5 个画廊入口（你可以改成你真实的 5 个页面文件名） -->
+    <div class="nav">
+      <a href="Cut Staatliche Museen zu Berlin.html">Cut / Berlin</a>
+      <a href="Fountain Tate.html">Fountain / Tate</a>
+      <a href="Karawane HOOD.html">Karawane / HOOD</a>
+      <a href="Mechanical head Pompidou.html">Mechanical Head / Pompidou</a>
+      <a href="Wheel MoMA.html">Wheel / MoMA</a>
+    </div>
+
+    <!-- ✅ 示例：底部缩略图（把文件名换成你想展示的） -->
+    <div class="thumbs">
+      <img data-src="berlin.png" alt="Berlin" />
+      <img data-src="tate.png" alt="Tate" />
+      <img data-src="HOOD.png" alt="HOOD" />
+      <img data-src="mechanic.png" alt="Pompidou" />
+      <img data-src="moma.png" alt="MoMA" />
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ✅ Drive 资源映射表
+     * key：你代码里用到的“文件名”
+     * value：你 Apps Script 导出的 uc 链接（export=view）
+     *
+     * 先填 5~10 个用到的就能跑起来，之后再慢慢补齐。
+     */
+    const DRIVE = {
+      "headline.png": "https://drive.google.com/uc?export=view&id=1g-zQhc19gcksFmc8QPsFXJql-NEvVYJP",
+      "back.png": "https://drive.google.com/uc?export=view&id=1Tolcl3rFP4eijdR7uFiTDgd1wQjjlbDa",
+
+      "berlin.png": "https://drive.google.com/uc?export=view&id=1QBpNCZ4MqQpDfNnMv54mq17VbwGXCfm_",
+      "tate.png": "https://drive.google.com/uc?export=view&id=1HP7oVo9tBsn_eHTnZBu82YcGSM_lPyjK",
+      "HOOD.png": "https://drive.google.com/uc?export=view&id=131kt8TVXK0xN_N8Xt70hWrLIVCMWQQfY",
+      "mechanic.png": "https://drive.google.com/uc?export=view&id=18a5UzKV4DBuvHuQP1aju2ju5v8xDoBWQ",
+      "moma.png": "https://drive.google.com/uc?export=view&id=1CC9eulxqpAKCgTQiEuvqaewAbnh2NrED"
+    };
+
+    // 取 URL：找不到就返回空字符串（并打日志）
+    function assetUrl(filename) {
+      const url = DRIVE[filename];
+      if (!url) console.warn("[ASSET MISSING]", filename);
+      return url || "";
+    }
+
+    // 注入 <img data-src="xxx.png">
+    function applyImgAssets() {
+      document.querySelectorAll("img[data-src]").forEach(img => {
+        const name = img.getAttribute("data-src");
+        const url = assetUrl(name);
+        if (!url) {
+          img.classList.add("asset-missing");
+          return;
+        }
+        img.src = url;
+        img.addEventListener("error", () => img.classList.add("asset-missing"), { once: true });
+      });
+    }
+
+    // 注入 背景 <div data-bg="xxx.png">
+    function applyBgAssets() {
+      document.querySelectorAll("[data-bg]").forEach(el => {
+        const name = el.getAttribute("data-bg");
+        const url = assetUrl(name);
+        if (!url) {
+          el.classList.add("asset-missing");
+          return;
+        }
+        el.style.backgroundImage = `url("${url}")`;
+      });
+    }
+
+    // 初始化
+    applyImgAssets();
+    applyBgAssets();
+  </script>
+</body>
+</html>
