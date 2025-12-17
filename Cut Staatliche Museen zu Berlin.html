@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cut Staatliche Museen zu Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+
+        body {
+            overflow-x: hidden; /* 禁止横向滚动 */
+            width: 100%;
+        }
+
+        header {
+            position: relative;
+            padding: 2vw;
+        }
+
+        header a img {
+            position: absolute;
+            width: 6vw;
+            top: 2vw;   
+            left: 5vw;  
+        }
+
+        header h1 {
+            position: absolute;
+            top: 11vw; 
+            left: 5vw;  
+            font-size: 1.6vw; 
+            color: black;   
+            margin: 0;   
+            font-family: Arial, Helvetica, sans-serif;
+            font:bolder;
+        }
+
+        header h2{
+            position: absolute;
+            left: 12vw;  
+            font-size: 1.5vw; 
+            color: black;   
+            margin: 0;   
+            font-family: Arial, Helvetica, sans-serif;
+            font:bolder;
+        }
+
+        header p{
+            position: absolute;
+            left: 12vw;  
+            top:4vw;
+            font-size: 1.3vw; 
+            color: black;   
+            margin: 0;   
+            font-weight: 300;
+        }
+
+        .container{
+            position:relative;
+            top:14vw;
+            left:22vw;
+        }
+        .back img {
+            width: 25vw;
+            height: auto;
+            position: absolute;
+            z-index: 2;
+            left:15vw;
+        }
+
+        .cut img {
+            width: 25vw;
+            height: auto;
+            position: absolute;
+            z-index: 1;
+            left:15vw;
+            display:none;
+        }
+
+        .text-box {
+            color: rgb(0, 0, 0);
+            font-size: 1.5vw;
+            width: 55vw;
+            position: absolute; 
+            top: 70vw; 
+            right: 5vw; 
+            z-index: 10;
+            font-weight: 400;
+        }
+
+        .text-box h2{
+            background-color: lightgray;
+            width:55vw;
+            height:4vw;
+            display: flex; justify-content: right; align-items: center;
+            font-size: 1.5vw;
+        }
+
+        .material{
+            background-color: lightgray;
+            width:55vw;
+            height:4vw;
+            display: flex; justify-content: right; align-items: center;
+            font-size: 1.5vw;
+            font-weight: bold;
+        }
+        .year{
+            background-color: rgb(255, 255, 255);
+            width:55vw;
+            height:4vw;
+            display: flex; justify-content: right; align-items: center;
+            font-size: 1.5vw;
+            font-weight: bold;
+        }
+
+
+
+
+        footer {
+            position: absolute; 
+            top: 150vw;
+            width: 100%; 
+            height: 18vw; 
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+            z-index: 2; 
+            left:0vw;
+            padding: 0; 
+        }
+
+        footer h2{
+            position: absolute;
+            top: 2vw;
+            left:5vw;
+            font-size: 1.8vw;
+            z-index: 3;
+        }
+
+
+        footer p {
+            position: absolute;
+            top: 8vw;
+            right: 5vw;
+            font-size: 2vw;
+            z-index: 3;
+            font-weight: bold;
+        }
+        .limittime {
+            color: rgb(222, 0, 0);
+            font-size: 1.2vw;
+            width: 90vw;
+            position: absolute; 
+            top: 54vw; 
+            left:10vw; 
+            z-index: 10;
+        }
+
+        .horizontal-line {
+            position: absolute; 
+            width: 90vw;    
+            height: 0.2vw;     
+            background-color: black; 
+            top: 58vw;    
+            left: 5vw;   
+            z-index: 1;   
+        }
+
+        .name{
+            position: absolute;   
+            top: 58vw;    
+            left:5vw;
+        }
+
+        .name h1{
+            color: rgb(0, 0, 0);
+            font-size: 2vw;
+            width:90vw;
+            z-index: 10;
+        }
+
+        .name p{
+            color: rgb(0, 0, 0);
+            font-size: 1.2vw;
+            z-index: 10;
+            font-weight: bolder;
+            position: absolute;
+            top:6vw;
+        }
+
+        .arrow {
+            position: absolute; 
+            font-size: 10vw;  
+            top: 25vw;    
+            left:25vw;   
+            z-index: 100;   
+            cursor:pointer;
+            transition: transform 0.1s ease-out;
+        }
+
+
+        .countdown {
+            position: absolute;
+            top: 2vw; 
+            right: 5vw; 
+            font-size: 2.5vw;
+            font-weight:500;
+            color: rgb(0, 0, 0);
+            z-index: 10;
+        }
+
+        /* 加载界面 */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black; /* 背景为黑色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+
+        .progress-bar {
+            width: 0;
+            height: 10px;
+            background-color: white;
+            animation: load 2s linear forwards;
+        }
+
+        @keyframes load {
+            100% {
+                width: 30%; 
+            }
+        }
+
+        h1 {
+            color: black;
+        }
+
+        p {
+            color: black;
+        }
+
+        /* 日志容器样式 */
+        .log-container {
+            transform-origin: 50% 50%; /* 使旋转以文本框自身的中心为基准 */
+            transform: rotate(270deg); /* 旋转90度 */
+            position: absolute;
+            top: 18vw;
+            right: 10vw;
+            width: 20vw;
+            max-height: 40vw;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            font-family: Arial;
+            font-size: 14px;
+            color:red;
+            z-index:0;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="https://recherche.smb.museum/detail/961048/schnitt-mit-dem-k%C3%BCchenmesser-dada-durch-die-letzte-weimarer-bierbauch-kulturepoche-deutschlands?language=de&limit=15&sort=relevance&controls=none&conditions=AND%2Bexhibitions%2B%22Hannah+H%C3%B6ch+1889-1978.+Ihr+Werk%2C+ihr+Leben%2C+ihre+Freunde%22&objIdx=5" target="_blank">
+            <img src="Elements/berlin.png" alt="berlin">
+        </a>
+        <a href="DAPO.html" target="_blank">
+            <h1>DaPO > Collection > Cut with the Kitchen Knife Dada through the Last Weimar Beer-Belly Cultural Epoch in Germany</h1>
+        </a>
+
+        <a href="DAPO.html" target="_blank">
+            <h2>Dada's Performance</h2>
+        </a>
+        <p>Dada's top 5 artworks</p>
+
+    </header>
+
+
+
+    <div class="container">
+        <div class="back">
+            <img src="Elements/back.png" alt="back">
+        </div>
+        <div class="cut">
+            <img src="Elements/cut.jpg" alt="cut">
+        </div>
+    </div>
+
+    <div class="limittime">
+        Attention: you only have 30 seconds to view this work! Since it was stolen from the Berlin National Museum, it can't be shown to you for too long.
+    </div>
+
+    <div class="horizontal-line"></div>
+
+    <div class="name">
+        <h1>Schnitt mit dem Küchenmesser Dada durch die letzte Weimarer Bierbauch-Kulturepoche Deutschlands
+        </h1>
+        <p>1919</p>    
+    </div>
+
+    <div class="arrow">
+        <h>🔪</h>
+    </div>
+
+    <div class="text-box" id="text-box">
+        <h2>Hannah Höch (1889 - 1978)&nbsp;&nbsp;&nbsp;</h2>
+        <p class="year">1919&nbsp;&nbsp;&nbsp;</p>
+        <p class="material">Material:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cardboard, collage&nbsp;&nbsp;&nbsp;</p>
+        In 1918, Hoch and her partner, the artist Raoul Hausmann (see "Mueck is Dead", B 68/5) spent their summer vacation on the Baltic island of Wolin. In their accommodation, they found a military memorial table that inspired them to create their own Dadaist absurd paintings (see Hannah Hoch. It all started with Dada!, exhibition catalogue. Berlin Gallery, 2007, p. 165, IL p. 10). After returning to Berlin, they created the first Dada photomontage. Hausmann "consciously proposed to achieve a new creation by cutting, reshaping or demoulding, omitting or adding, thus completely alienating the shape, color and content," Hoch later recalled. She wanted something similar to her large collages. "Only I did this visually through a large number of photos, forming groups according to the content - making a statement" (quoted in ibid., p. 165). Protagonists from the fields of politics, science and culture were depicted. In the upper part of the picture, technological progress and militant politics come together, represented by Albert Einstein and the last German emperor, Wilhelm II. In the lower part, Hoch sees Dadaism as a mass movement, always striving to carve up the recognized authorities. With alarming frequency, the artist stages ironic gender swaps, with Paul von Hindenburg as a belly dancer and George Grosz as a ballerina. It is a complete photo-disassembly, with which Hoch responds to her time. Already in 1920, this epochal image of the Weimar Republic received special attention at the “First International Dada Fair” in Berlin.
+    </div>
+
+    <div class="countdown">Time left <span id="timer">20</span> seconds</div>
+
+    <footer>
+        <h2>About us</h2>
+        <p>&copy; 2024 DaPO Collection</p>
+    </footer>
+
+    <div id="loading-screen">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- 添加日志记录区域 -->
+    <div id="log-container" class="log-container"></div>
+
+
+
+
+    <script>
+
+        // 获取需要操作的 DOM 元素
+        const arrow = document.querySelector('.arrow');
+        const backImg = document.querySelector('.back img');
+        const cutImg = document.querySelector('.cut img');
+
+        // 定义一个点击计数器
+        let clickCount = 0;
+
+        // 添加点击事件
+        arrow.addEventListener('click', () => {
+            clickCount++;
+
+            if (clickCount === 1) {
+                // 第一次点击：显示 cutImg
+                cutImg.style.display = 'block';
+            } else if (clickCount === 2) {
+                // 第二次点击：隐藏 backImg
+                backImg.style.display = 'none';
+            } else if (clickCount === 3) {
+                // 第三次点击：恢复初始状态
+                backImg.style.display = 'block';
+                cutImg.style.display = 'none';
+                clickCount = 0; // 重置计数器
+            }
+        });
+
+        const timerElement = document.getElementById('timer');
+        const arrowElement = document.querySelector('.arrow');
+
+        // 初始化倒计时（精确到小数点两位）
+        let timeLeft = 30.00; // 倒计时开始为 20 秒
+        let countdownStarted = false; // 用于确保倒计时开始前不执行弹球运动
+
+        // 弹球运动的参数
+        let arrowSpeedX = 2; // X方向的速度
+        let arrowSpeedY = 1; // Y方向的速度
+        let arrowPosX = 50; // 初始位置X
+        let arrowPosY = 50; // 初始位置Y
+        let arrowRadius = 7; // 弹球的大小
+
+        // 创建定时器，每 100 毫秒更新一次
+        const countdown = setInterval(() => {
+            timeLeft -= 0.1; // 每次减少 0.1 秒
+            timerElement.textContent = timeLeft.toFixed(2); // 保留两位小数
+
+            // 当倒计时结束时，执行以下逻辑
+            if (timeLeft <= 0 && !countdownStarted) {
+                clearInterval(countdown); // 清除定时器
+                alert("Time's up!"); // 倒计时结束的提示
+                document.querySelector('.container').style.display = 'none'; // 隐藏相关内容
+                countdownStarted = true; // 启动弹球运动
+                startBouncing(); // 启动弹球效果
+            }
+        }, 100); // 每 100 毫秒更新一次
+
+        // 开始弹球运动
+        function startBouncing() {
+            const bounceInterval = setInterval(() => {
+                if (!countdownStarted) return; // 确保倒计时结束后才触发弹球
+
+                // 获取当前窗口宽高
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+
+                // 更新位置
+                arrowPosX += arrowSpeedX;
+                arrowPosY += arrowSpeedY;
+
+                // 检查是否撞击到边界，反弹
+                if (arrowPosX <= arrowRadius || arrowPosX >= windowWidth - arrowRadius) {
+                    arrowSpeedX = -arrowSpeedX; // 水平方向反弹
+                }
+                if (arrowPosY <= arrowRadius || arrowPosY >= windowHeight - arrowRadius) {
+                    arrowSpeedY = -arrowSpeedY; // 垂直方向反弹
+                }
+
+                // 设置箭头的新位置
+                arrowElement.style.left = `${arrowPosX}px`;
+                arrowElement.style.top = `${arrowPosY}px`;
+            }, 10); // 每10毫秒更新一次
+        }
+
+        window.onload = function() {
+            // 设置 3 秒后隐藏加载界面并显示页面内容
+            setTimeout(function() {
+                // 隐藏加载界面
+                document.getElementById('loading-screen').style.display = 'none';
+                
+                // 显示页面内容
+                document.getElementById('main-content').style.display = 'block';
+            }, 2000); // 3秒后消失
+        };
+
+
+        // 获取日志容器
+        const logContainer = document.getElementById('log-container');
+
+        function logMessage(message) {
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            logItem.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(logItem);
+
+            // 自动滚动到最新日志
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // 修改您现有的点击事件监听器逻辑
+        arrow.addEventListener('click', () => {
+            clickCount++;
+
+            // 记录每次点击和当前倒计时时间
+            logMessage(`Click ${clickCount} at Countdown Time: ${timeLeft.toFixed(2)}s`);
+
+            if (clickCount === 1) {
+                document.querySelector('.cut img').style.display = 'block';
+            } else if (clickCount === 2) {
+                document.querySelector('.back img').style.display = 'none';
+            } else if (clickCount === 3) {
+                document.querySelector('.back img').style.display = 'block';
+                document.querySelector('.cut img').style.display = 'none';
+                clickCount = 0;
+            }
+        });
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

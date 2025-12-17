@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanical head Pompidou</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+
+        body {
+            background-color: rgb(255, 255, 255); 
+            color: white; 
+        }
+
+        header {
+            position: relative;
+        }
+
+        header a img {
+            position:absolute;
+            width: 10vw;
+            top: 2vw;   
+            left: 25vw;  
+            z-index:5;
+        }
+
+        .headline img {
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            margin: 0; 
+            padding: 0; 
+            position: absolute; 
+            top: 0; 
+            z-index:0;
+        }
+
+        header h {
+            position: absolute;
+            top: 2.5vw; 
+            left: 4vw;  
+            font-size: 3vw; 
+            color: rgb(255, 255, 255);   
+            margin: 0;   
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            line-height: 0.5; 
+        }
+
+        .container img{
+            position: relative; 
+            right:11.5vw;
+            top:50vw;
+        }
+
+        .head img{
+            position: absolute;
+            width: 30vw;
+            z-index: 6;
+        }
+
+        .behind img{
+            position:absolute;
+            width: 30vw;
+            z-index: 3;
+            display: none;
+        }
+        .left img{
+            position:absolute;
+            width: 35vw;
+            top:45vw;
+            right: 10vw;
+            z-index: 5;
+            display: none;
+        }
+        .right img{
+            position:absolute;
+            right:16vw;
+            width: 24vw;
+            z-index: 4;
+            top:55vw;
+            display: none;
+        }
+
+
+        .text-box {
+            position: absolute;
+            top: 58vw;
+            left: 2vw;
+            width: 38vw;
+            color: rgb(0, 0, 0);
+            font-size: 1.1vw;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+
+        footer {
+            position: absolute;
+            top: 100vw;
+            left:0;
+            background-color: #3d3d3d;
+            color: rgb(255, 255, 255);
+            width: 100%;
+            height:20vw;
+            z-index: 2;
+        }
+
+        footer img {
+            position: absolute;
+            left: 42.5vw;
+            top: 6vw;
+            width: 14vw;
+            height: auto;
+            z-index: 3;
+        }
+
+        footer p {
+            position: absolute;
+            top: 16vw;
+            left: 43.5vw;
+            font-size: 1vw;
+            z-index: 3;
+            font-weight: 300;
+        }
+
+        .text{
+            position:absolute;
+            top:38vw;
+            left: 2vw;
+            font-size: 1.5vw;
+            width:30vw;
+            color:rgb(0, 0, 0);
+            z-index:4;
+            font-weight: 500;
+        }
+        .text h1{
+            font-weight: 700;
+            font-size: 1.7vw;
+            text-decoration: underline;
+        }
+        .text h2{
+            font-weight: 700;
+            font-size: 1.7vw;
+            font-style: italic;
+        }
+        .text p{
+            font-weight: 400;
+            font-size: 1.7vw;
+
+        }
+
+        
+        .rectangle2 {
+            width: 100%; 
+            height: 80vw; 
+            top:30vw;
+            left:0vw;
+            background-color: rgb(255, 255, 255); 
+            position: relative; 
+            margin: 0;
+            padding: 0; 
+            z-index: 1; 
+        }
+
+        .rectangle1 {
+            width: 50vw; 
+            height: 50vw; 
+            top:40vw;
+            right:2vw;
+            background-color: rgb(58, 58, 58);
+            position: absolute; 
+            margin: 0; 
+            padding: 0; 
+            z-index: 1; 
+        }
+
+        .rectangle3 {
+            width: 27vw; 
+            height: 40vw; 
+            top:44vw;
+            right:13.5vw;
+            background-color: rgb(197, 205, 193);
+            position: absolute; 
+            margin: 0; 
+            padding: 0; 
+            z-index: 2; 
+        }
+        .rectangle4 {
+            width: 7vw; 
+            height: 8vw; 
+            top:60vw;
+            right:43vw;
+            background-color: rgb(0, 0, 0); 
+            position: absolute; 
+            margin: 0; 
+            padding: 0; 
+            z-index: 2; 
+            cursor: pointer;
+        }
+
+        .rectangle5 {
+            width: 7vw; /* 等于网页宽度 */
+            height: 8vw; /* 高度为 70vw */
+            top:60vw;
+            right:4vw;
+            background-color: rgb(0, 0, 0); /* 背景颜色为黄色 */
+            position: absolute; /* 可以根据需要调整位置 */
+            margin: 0; /* 确保没有额外边距 */
+            padding: 0; /* 确保没有内边距 */
+            z-index: 2; 
+            cursor: pointer;
+        }
+
+        .rectangle4 h{
+            display: flex; justify-content: center; align-items: center;
+            font-size: 6vw;
+            color: rgb(133, 132, 132);
+            font-weight: bolder;
+        }
+
+        .rectangle5 h{
+            display: flex; justify-content: center; align-items: center;
+            font-size: 6vw;
+            color: rgb(133, 132, 132);
+            font-weight: bolder;
+        }
+
+        .horizontal-line {
+            position: absolute; 
+            width: 100%;    
+            height: 0.2vw;     
+            background-color: rgb(255, 255, 255); 
+            top: 10vw;    
+            left: 0vw;   
+            z-index: 2;   
+        }
+
+        .name {
+            position: absolute;
+            top: 15vw; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            text-align: center; 
+            color: white; 
+            font-size: 1.5vw; 
+            font-weight: bolder; 
+            z-index: 10; 
+            width:70vw;
+        }
+
+        .name h1, .name h2, .name p {
+            margin: 0; 
+        }
+
+        .name h1{
+          font-size: 1.5vw;
+          font-weight: 400;
+        }
+
+        .name h2{
+          font-size: 3.5vw;
+          font-style: italic;
+        }
+
+        .name p{
+          font-weight: 400;
+        }
+
+        #log-container {
+            position: absolute;
+            top: 43.5vw;
+            right: 18.5vw;
+            width: 15vw;
+            height: 38vw;
+            color: rgb(1, 146, 1);
+            padding: 1vw;
+            font-size: 1vw;
+            overflow-y: auto;
+            z-index: 9999;
+        }
+        #print-logs {
+            position: absolute;
+            top: 85.5vw;
+            right: 23.5vw;
+            padding: 0.4vw 1vw;
+            font-size: 1vw;
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        .logging-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .logging-container h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .logging-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .logging-container li {
+            margin-bottom: 5px;
+            padding: 5px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cGzAKG" target="_blank">
+            <img src="Elements/french2.png" alt="moma">
+        </a>
+        <div class="headline">
+            <img src="Elements/headline.png" alt="headline">
+        </div>
+        <a href="DAPO.html" target="_blank">
+            <h>Dada's <br><br>Performance</h>
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="head">
+            <img src="Elements/huasmann mechanical head1.png" alt="front">
+        </div>
+        <div class="behind">
+            <img src="Elements/huasmann meachanical head back.png" alt="behind">
+        </div>
+        <div class="left">
+            <img src="Elements/metal head1.png" alt="left">           
+        </div>
+        <div class="right">
+            <img src="Elements/metal head2.png" alt="right">           
+        </div>
+    </div>
+
+    <div class="rectangle2"></div>
+    <div class="rectangle1"></div>
+    <div class="rectangle3"></div>
+    <div class="rectangle4">
+        <h>←</h>
+    </div>
+    <div class="rectangle5">
+        <h>→</h>
+    </div>
+
+        <div class="text-box" id="text-box">
+            «Je voulais dévoiler l'esprit de notre temps, esprit de chacun dans son état rudimentaire.» <br><br>
+            The most famous work by Hausmann, Mechanischer Kopf (Der Geist Unserer Zeit), "The Mechanical Head (The Spirit of Our Time)", c. 1920, is the only surviving assemblage that Hausmann produced around 1919–20. Constructed from a hairdresser's wig-making dummy, the piece has various measuring devices attached including a ruler, a pocket watch mechanism, a typewriter, some camera segments and a crocodile wallet.
+            <br><br>"Der Geist Unserer Zeit – Mechanischer Kopf specifically evokes the philosopher George Wilhelm Friedrich Hegel (1770–1831). For Hegel...everything is mind. Among Hegel's disciples and critics was Karl Marx. Hausmann's sculpture might be seen as an aggressively Marxist reversal of Hegel: this is a head whose "thoughts" are materially determined by objects literally fixed to it. However, there are deeper targets in western culture that give this modern masterpiece its force. Hausmann turns inside out the notion of the head as seat of reason, an assumption that lies behind the European fascination with the portrait. He reveals a head that is penetrated and governed by brute external forces. 
+        </div>
+
+
+        <div class="text">
+            <h1>Raoul Hausmann <br><br> (1886, Autriche - 1971, France)</h1>
+            <h2>Mechanical Head (The Spirit of Our Time)</h2>
+            <p>[1919]</p>
+        </div>
+
+        <div class="horizontal-line"></div>
+
+        <div class="name">
+          <h1>Raoul Hausmann</h1>
+          <h2>Mechanical Head (The Spirit of Our Time)</h2>
+          <p>[1919]</p>
+      </div>
+      
+      <button id="print-logs">Print Logs</button>
+
+      <div id="log-container"></div>
+
+        
+
+        <footer>
+            <a href="https://www.centrepompidou.fr/fr/ressources/oeuvre/cGzAKG">
+                <img src="Elements/french2.png" alt="Tate logo">
+            </a>
+            <p>&copy; 2024 DaPO Collection</p>
+        </footer>
+        
+    
+
+
+        <script>
+
+
+            document.addEventListener('DOMContentLoaded', () => {
+        
+                const logContainer = document.getElementById('log-container');
+                const printButton = document.getElementById('print-logs');
+
+                if (!logContainer) {
+                    console.error('No log container found!');
+                    return;
+                }
+
+                const observer = new MutationObserver(() => {
+                    console.log('Log content updated:', logContainer.textContent.trim());
+                });
+
+                observer.observe(logContainer, { childList: true, subtree: true });
+
+                // 添加按钮点击事件
+                printButton.addEventListener('click', () => {
+                    const logs = logContainer.textContent.trim();
+
+                    if (!logs) {
+                        alert('No logs to print!');
+                        return;
+                    }
+
+                    try {
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF();
+
+                        const lines = doc.splitTextToSize(logs, 180);
+                        doc.text(lines, 10, 10);
+
+                        doc.save('logs.pdf');
+                    } catch (error) {
+                        console.error('Failed to generate PDF:', error);
+                    }
+                });
+
+                
+                setInterval(() => {
+                    const timeStamp = new Date().toLocaleTimeString();
+                    const log = document.createElement('div');
+                    log.textContent = `New log entry at ${timeStamp}`;
+                    logContainer.appendChild(log);
+                }, 5000); 
+            });
+
+
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const logContainer = document.getElementById('log-container');
+                const printButton = document.getElementById('print-logs');
+                const rectangle4 = document.querySelector('.rectangle4');
+                const rectangle5 = document.querySelector('.rectangle5');
+
+                function logClick(buttonName) {
+                    const timestamp = new Date().toLocaleTimeString();
+                    const logEntry = document.createElement('div');
+                    logEntry.textContent = `[${timestamp}] Click: ${buttonName}`;
+                    logContainer.appendChild(logEntry);
+
+                    if (logContainer.childElementCount > 50) {
+                        logContainer.removeChild(logContainer.firstChild);
+                    }
+                }
+
+                rectangle4.addEventListener('click', () => logClick('← Rectangle 4'));
+                rectangle5.addEventListener('click', () => logClick('→ Rectangle 5'));
+
+                printButton.addEventListener('click', () => {
+                    const logs = Array.from(logContainer.children)
+                        .map(entry => entry.textContent)
+                        .join('\n');
+
+                    if (!logs) {
+                        alert('No logs to print!');
+                        return;
+                    }
+
+                    try {
+                        const { jsPDF } = window.jspdf;
+                        const pdf = new jsPDF();
+                        pdf.text(logs, 10, 10);
+                        pdf.save('logs.pdf');
+                    } catch (error) {
+                        console.error('Error generating PDF:', error);
+                    }
+                });
+            });
+
+          const frontImg = document.querySelector('.head img');
+          const behindImg = document.querySelector('.behind img');
+          const leftImg = document.querySelector('.left img');
+          const rightImg = document.querySelector('.right img');
+
+          let clickCounter5 = 0;
+          document.querySelector('.rectangle5').addEventListener('click', () => {
+              frontImg.style.display = 'none';
+              behindImg.style.display = 'none';
+              leftImg.style.display = 'none';
+              rightImg.style.display = 'none';
+
+              switch (clickCounter5) {
+                  case 0:
+                      leftImg.style.display = 'block';
+                      break;
+                  case 1:
+                      behindImg.style.display = 'block';
+                      break;
+                  case 2:
+                      rightImg.style.display = 'block';
+                      break;
+                  case 3:
+                      frontImg.style.display = 'block';
+                      break;
+              }
+              clickCounter5 = (clickCounter5 + 1) % 4;
+          });
+
+          let clickCounter4 = 0;
+          document.querySelector('.rectangle4').addEventListener('click', () => {
+              frontImg.style.display = 'none';
+              behindImg.style.display = 'none';
+              leftImg.style.display = 'none';
+              rightImg.style.display = 'none';
+
+              switch (clickCounter4) {
+                  case 0:
+                      rightImg.style.display = 'block';
+                      break;
+                  case 1:
+                      behindImg.style.display = 'block';
+                      break;
+                  case 2:
+                      leftImg.style.display = 'block';
+                      break;
+                  case 3:
+                      frontImg.style.display = 'block';
+                      break;
+              }
+              clickCounter4 = (clickCounter4 + 1) % 4;
+          });
+
+
+      </script>
+      
+        
+        
+</body>
+</html>

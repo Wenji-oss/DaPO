@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaPO Tate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            opacity: 0; 
+            animation: fadeIn 2s forwards; 
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0; 
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 2vw;
+            opacity: 0; 
+            animation: fadeInContent 1s 1s forwards; 
+        }
+
+        @keyframes fadeInContent {
+            0% {
+                opacity: 0; 
+            }
+            100% {
+                opacity: 1; 
+            }
+        }
+
+        header {
+            position: relative;
+            text-align: center;
+            padding: 2vw;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6vw;
+            background-color: white;
+            z-index: 2;
+        }
+
+        header img {
+            position: relative;
+            top: -1vw;
+            width: 10vw;
+            z-index: 2;
+        }
+
+
+
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 2vw;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: -10vw;
+            left: 0;
+            width: 100%;
+            height: 60vw;
+            background-color: #e6e5df;
+            z-index: 0; 
+        }
+
+        .content h1{
+            position:relative;
+            left: 31vw;
+            top:20vw;
+            z-index:5;
+            color:rgb(255, 255, 255);
+            font-size: 1.5vw;
+            background-color: rgb(0, 0, 0);
+            width:4vw;
+            cursor:pointer;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .image-section img {
+            position: absolute;
+            top: 4vw;
+            left: 15vw;
+            width: 40vw;
+            height: auto;
+            z-index: 2;
+        }
+
+        .image-section img.fountain3 {
+            z-index: 4; 
+        }
+
+        .image-section img.fountain4 {
+            z-index: 3; 
+        }
+
+        
+
+        .image-background {
+            position: absolute;
+            top: 0vw; 
+            left: 10vw; 
+            width: 52vw; 
+            height: 48vw;
+            aspect-ratio: 1/1; 
+            background-color: rgb(52, 54, 47); 
+            z-index: 0; 
+        }
+
+        .info-section {
+            position: absolute;
+            top: 4vw;
+            right: 7vw;
+            font-size: 1.5vw;
+            width: 23vw;
+            height: 20vw;
+            z-index: 1;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* info-section 的长段落文字 */
+        .info-section p.hidden {
+            display: none;
+        }
+
+        .info-section p:nth-of-type(3) {
+            position: absolute;
+            top: 13vw;
+            font-size: 1.2vw;
+            font-weight: lighter;
+            width: 0;
+            color: rgb(0, 0, 0);
+            display: none;
+            overflow: hidden;
+            animation: typing-line 5s steps(30) 1s forwards; /* 逐字显示 */
+        }
+
+        @keyframes typing-line {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+
+
+        footer {
+            position: absolute;
+            top: 60vw;
+            background-color: #ffffff;
+            color: black;
+            text-align: center;
+            padding: 5vw;
+            width: 100%;
+            z-index: 2;
+        }
+
+        footer img {
+            position: absolute;
+            left: 10vw;
+            top: 1vw;
+            width: 5vw;
+            height: auto;
+            z-index: 2;
+        }
+
+        footer p {
+            position: absolute;
+            top: -0.2vw;
+            left: 80vw;
+            font-size: 1.5vw;
+            z-index: 3;
+        }
+
+        .textbox {
+            position: relative;
+            left:30vw;
+            top:7vw;
+            width: 40vw;
+            height: 18vw;
+            background-color: rgb(255, 255, 255);
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 4;
+            border-radius: 1vw; 
+            display: none;
+            box-sizing: border-box;
+            border: 2px solid black;
+        }
+
+        /* 设置main-text样式 */
+        .main-text {
+            font-size: 3vw;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            line-height: 15vw; 
+            font-weight: lighter;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        .main-text p{
+            font-size: 1.2vw;
+            color:rgb(0, 0, 0);
+            position:absolute;
+            top:3vw;
+            left:33%;
+            font-weight: bolder;
+        }
+
+
+        .no {
+            position: absolute;
+            top: 0.8vw;
+            right: 1.5vw;
+            font-size: 2vw;
+            font-weight: bolder;
+            color: rgb(0, 0, 0);
+            cursor: pointer; 
+        }
+
+        @keyframes rotate180 {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(180deg);
+            }
+        }
+
+        .rotate-animation {
+            animation: rotate180 3s forwards;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <a href="https://www.tate.org.uk/art/artworks/duchamp-fountain-t07573" target="_blank">
+            <img src="Elements/tate.png" alt="Fountain by Marcel Duchamp">
+        </a>
+    </header>
+
+    <div class="content">
+        <div class="image-section">
+            <img src="Elements/fountain3.png" alt="Fountain by Marcel Duchamp" class="rotating-image fountain3">
+            <img src="Elements/fountain4.png" alt="Fountain2 by Marcel Duchamp" class="rotating-image fountain4">
+            <h1>PLAY</h1>
+        </div>
+        <div class="info-section">
+            <h2>Fountain</h2>
+            <p>1917, replica 1964, Marcel Duchamp</p>
+            <p>Medium: Porcelain urinal</p>
+            <p>Fountain is Duchamp’s most famous example of a “readymade” sculpture. It is an inverted male urinal, signed "R. Mutt." This work challenged traditional definitions of art, subverting conventional notions of art and beauty. Duchamp argued that the essence of art lies in ideas rather than the craftsmanship of the object. By selecting everyday objects and giving them new contexts and meanings, he emphasized the intellectual aspect of art, pioneering conceptual art and profoundly influencing the development of 20th-century art.</p>
+        </div>
+        <div class="image-background"></div>
+    </div>
+
+    <div class="textbox">
+        <div class="main-text">
+            <a href="https://www.tate.org.uk/art/artworks/duchamp-fountain-t07573">
+                SUBSCRIBE
+            </a>
+            <p>This is an advertisement.</p>
+        </div>
+        <div class="no">
+            x
+        </div>
+    </div>
+
+    <footer>
+        <a href="https://www.tate.org.uk/art/artworks/duchamp-fountain-t07573">
+            <img src="Elements/tate.png" alt="Tate logo">
+        </a>
+        <p>Visit more</p>
+    </footer>
+
+    <script>
+        // 点击事件
+        document.querySelector(".content h1").addEventListener("click", function() {
+            document.querySelector(".textbox").style.display = "block"; // 点击 h1 时显示 textbox
+        });
+
+        // 点击 .no 隐藏 textbox 和 h1，并执行旋转动画
+        document.querySelector(".no").addEventListener("click", function() {
+            document.querySelector(".textbox").style.display = "none";
+
+            document.querySelector(".content h1").style.display = "none";
+
+            document.querySelector(".info-section p:nth-of-type(3)").style.display = "block";
+
+            const fountain3 = document.querySelector(".fountain3");
+            const fountain4 = document.querySelector(".fountain4");
+
+            fountain3.classList.add("rotate-animation");
+            fountain4.classList.add("rotate-animation");
+
+            fountain3.addEventListener("animationend", function() {
+                fountain3.style.display = "none";
+            });
+        });
+    
+
+
+
+    </script>
+</body>
+</html>

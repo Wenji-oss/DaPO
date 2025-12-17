@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaPO SFMOMA</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #ec3535;
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .logo {
+            position: fixed;
+            top: 0vw;
+            left: 0;
+            width: 100%;
+            height: 8vw;  
+            background-color: #fff;  
+            z-index: 5; 
+            box-shadow: 0 0.3vw 0.3vw rgba(0, 0, 0, 0.2); 
+            z-index: 5; 
+        }
+
+        .header .logo img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8vw;  
+            height: auto;  
+            z-index: 6;  
+        }
+
+        /* Hero Section */
+        .hero {
+            position: absolute;
+            top: 11vw;
+            left: 50%;
+            transform: translate(-50%, 0);
+            text-align: center;
+            padding: 10px;
+        }
+
+        .hero h1 {
+            font-size: 4vw;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+
+        .hero p {
+            position:absolute;
+            left:1vw;
+            font-size: 1.7vw;
+            color: lightgrey;
+        }
+
+        /* Horizontal Line */
+        .hero h1 + p {
+            margin-top: 30px;
+        }
+
+        .hero h1::after {
+            content: "";
+            display: block;
+            margin-top: 10px;
+            width: 70vw;
+            height: 2px;
+            background-color: lightgray;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            top:6vw;
+            z-index:0;
+        }
+
+        /* Collection Section */
+        .collection {
+            padding: 20px;
+            position: relative;
+        }
+
+        .collection-grid {
+            position: relative;
+            height: 100vh;
+        }
+
+        .art-item {
+            position: absolute;
+            width: 25vw;
+            height: auto;
+            text-align: left;
+            opacity: 0;  /* Initially hidden */
+            transition: opacity 3s ease-out;  /* Fade-in animation */
+        }
+
+        .art-item.visible {
+            opacity: 1;  /* Show image when it comes into view */
+        }
+
+        /* Positioning of the Artworks */
+        .art-item:nth-child(1) {
+            width: 50vw;
+            left: -2vw;
+            top: 27vw;
+            z-index:2;
+        }
+
+        .art-item:nth-child(2) {
+            width: 25vw;
+            right: 35vw;
+            top: 26vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(9) {
+            width: 25vw;
+            right: 35vw;
+            top: 26vw;
+            z-index:4;
+        }
+        
+
+        .art-item:nth-child(3) {
+            width: 45vw;
+            right: 0vw;
+            top: 27vw;
+            z-index:1;
+        }
+
+        .art-item:nth-child(4) {
+            width: 25vw;
+            left: 10.5vw;
+            top: 92vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(5) {
+            width: 30vw;
+            right: 33vw;
+            top: 63vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(6) {
+            width: 17vw;
+            right: 14vw;
+            top: 82vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(7) {
+            width: 45vw;
+            right: 0vw;
+            top: 111vw;
+            z-index:2;
+        }
+
+        .art-item:nth-child(8) {
+            width: 55vw;
+            right: 21vw;
+            top: 113vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(10) {
+            width: 30vw;
+            right: 33vw;
+            top: 63vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(12) {
+            width: 55vw;
+            right: 21vw;
+            top: 113vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(11) {
+            width: 19vw;
+            right: 13vw;
+            top: 27vw;
+            z-index:1;
+        }
+
+        .art-item:nth-child(13) {
+            width: 17vw;
+            right: 14vw;
+            top: 82vw;
+            z-index:3;
+        }
+
+        .art-item:nth-child(14) {
+            width: 50vw;
+            left: -2vw;
+            top: 27vw;
+            z-index:2;
+        }
+
+
+        .art-item img {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        /* Adjusting h3 and p for individual artworks */
+        .art-item h3, .art-item p {
+            position: absolute;
+            left: 10%;
+            margin: 0;
+        }
+        .art-item:nth-child(1) h3 {
+            position:absolute;
+            left:30%;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+        .art-item:nth-child(1) p {
+            position:absolute;
+            left:30%;
+            top: 110%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(2) h3 {
+            position:absolute;
+            left:0%;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+
+
+        .art-item:nth-child(2) p {
+            position:absolute;
+            left:0%;
+            top: 118%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(3) h3 {
+            position:absolute;
+            left:31%;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+        .art-item:nth-child(3) p {
+            position:absolute;
+            left:31%;
+            top: 110%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(4) h3 {
+            position:absolute;
+            left:10%;
+            width:20vw;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+        .art-item:nth-child(4) p {
+            top: 272%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(5) h3 {
+            position:absolute;
+            width:10vw;
+            left:10%;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+        .art-item:nth-child(5) p {
+            position:absolute;
+            left:10%;
+            top: 132%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(6) h3 {
+            position:absolute;
+            left:0%;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+        .art-item:nth-child(6) p {
+            position:absolute;
+            left:0%;
+            top: 127%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(7) h3 {
+            position:absolute;
+            left:32%;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+        .art-item:nth-child(7) p {
+            position:absolute;
+            left:32%;
+            top: 112%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(8) h3 {
+            position:absolute;
+            left:31%;
+            top: 100%;
+            font-size: 3vw;
+            color: #000000;
+        }
+
+        .art-item:nth-child(8) p {
+            position:absolute;
+            left:31%;
+            top: 110%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(9) h3 {
+            position:absolute;
+            left:0%;
+            top: 100%;
+            font-size: 3vw;
+            color: rgb(0, 0, 0);
+        }
+
+        .art-item:nth-child(9) p {
+            position:absolute;
+            left:0%;
+            top: 118%;
+            font-size: 1.5vw;
+            color:#666;
+        }
+
+
+        .art-item:nth-child(10) h3 {
+            position:absolute;
+            width:10vw;
+            left:10%;
+            top: 100%;
+            font-size: 3vw;
+            color: black;
+        }
+
+        .art-item:nth-child(10) p {
+            position:absolute;
+            left:10%;
+            top: 132%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(11) h3 {
+            position:absolute;
+            left:5%;
+            top: 96%;
+            font-size: 3vw;
+            color: black;
+        }
+
+        .art-item:nth-child(11) p {
+            position:absolute;
+            left:5%;
+            top: 106%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(12) h3 {
+            position:absolute;
+            left:31%;
+            top: 100%;
+            font-size: 3vw;
+            color: rgb(0, 0, 0);
+        }
+
+        .art-item:nth-child(12) p {
+            position:absolute;
+            left:31%;
+            top: 110%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(13) h3 {
+            position:absolute;
+            left:0%;
+            top: 100%;
+            font-size: 3vw;
+            color: rgb(0, 0, 0);
+        }
+
+        .art-item:nth-child(13) p {
+            position:absolute;
+            left:0%;
+            top: 127%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+        .art-item:nth-child(14) h3 {
+            position:absolute;
+            left:30%;
+            top: 100%;
+            font-size: 3vw;
+            color: black;
+        }
+
+        .art-item:nth-child(14) p {
+            position:absolute;
+            left:30%;
+            top: 110%;
+            font-size: 1.5vw;
+            color: #666;
+        }
+
+
+        .shake {
+            animation: shake ease-in-out;
+            animation-duration: 0.3s; 
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-8px, 0); }
+            50% { transform: translate(8px, 0); }
+            75% { transform: translate(-8px, 0); }
+            100% { transform: translate(8px, 0); }
+        }
+
+        .art-item h3, .art-item p {
+            transition: color 0.3s ease-in-out; 
+        }
+
+        .art-item:hover h3 {
+            color: #ec3535; 
+        }
+
+        .art-item:hover p {
+            color: #ff5722; 
+        }
+
+
+        .about {
+            color: #fff;
+            text-align: center;
+            position: absolute;
+            top: 201.5vw;
+            left:4vw;
+            font-size: 1vw;
+            z-index:8;
+            font-family:initial;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            background: #ec3535;
+            position: absolute;
+            height:4vw;
+            width: 100%;
+            top: 200vw;
+            font-size: 1vw;
+        }
+
+        .footer p{
+            position:absolute;
+            right:4vw;
+            top:-2.5vw;
+            color:#b7b7b7;
+        }
+
+
+
+
+        #monitor {
+            position: fixed;
+            top: 2vw;
+            right: 4vw;
+            color: #ec3535;
+            background:#ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.8vw;
+            z-index: 7;
+            pointer-events: none;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #move{
+            position:fixed;
+            bottom: 7vw;
+            right: 15px;
+            color:#ffffff;
+            font-size: 1.8vw;
+            z-index:7;
+            font-weight: bold;
+        }
+
+        #chaos h1 {
+            position: fixed; 
+            top: 2vw; 
+            left: 4vw; 
+            z-index: 7;
+            font-size: 1.8vw;
+            font-weight: lighter;
+            color: #ec3535;
+            white-space: nowrap; 
+            overflow: hidden; 
+            width: 0; 
+            animation: typewriter 4s steps(30) 1s forwards; 
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        @media (max-width: 800px) {
+            #chaos h1 {
+                font-size: 18px;
+            }
+        }    
+
+
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%; 
+            }
+        }
+
+        @media (max-width: 700px) {
+            
+            .art-item {
+                width: 30vw; /* 统一宽度为 30vw */
+                z-index: 2; /* 统一 z-index 为 2 */
+                left: 10vw; /* 靠左 10vw */
+            }
+
+            /* 设置 artwork 的 top 排列间距为 20vw */
+            .art-item:nth-child(1) {
+                top: 30vw;
+                width:100vw;
+            }
+
+            .art-item:nth-child(2) {
+                top: 150vw;
+                width:70vw;
+            }
+
+            .art-item:nth-child(3) {
+                top: 245vw;
+                width:100vw;
+                left:-2vw;
+            }
+
+            .art-item:nth-child(4) {
+                top: 380vw;
+                width: 70vw;
+            }
+
+            .art-item:nth-child(5) {
+                top: 500vw;
+                width:70vw;
+            }
+
+            .art-item:nth-child(6) {
+                top: 600vw;
+                width:70vw;
+            }
+
+            .art-item:nth-child(7) {
+                top: 700vw;
+                width:100vw;
+                left:-5vw;
+            }
+
+            .art-item:nth-child(8) {
+                top: 830vw;
+                width:100vw;
+                left:-2vw;
+            }
+
+            .art-item:nth-child(9) {
+                top: 150vw;
+                width:70vw;
+            }
+
+            .art-item:nth-child(10) {
+                top: 500vw;
+                width:70vw;
+            }
+
+            .art-item:nth-child(11) {
+                top: 245vw;
+                width:45vw;
+                left:25vw;
+
+            }
+
+            .art-item:nth-child(12) {
+                top: 830vw;
+                width:100vw;
+                left:-2vw;
+            }
+
+            .art-item:nth-child(13) {
+                top: 600vw;
+                width:70vw;
+            }
+
+            .art-item:nth-child(14) {
+                top: 30vw;
+                width:100vw;
+            }
+
+            .art-item:nth-child(1) h3 {
+            position:absolute;
+            left:34%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+            text-align: center; /* 文本居中对齐 */
+        }
+
+        .art-item:nth-child(1) p {
+            position:absolute;
+            left:38%;
+            top: 110%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(2) h3 {
+            position:absolute;
+            left:40%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+
+
+        .art-item:nth-child(2) p {
+            position:absolute;
+            left:37%;
+            top: 113%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(3) h3 {
+            position:absolute;
+            left:36%;
+            top: 110%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+        .art-item:nth-child(3) p {
+            position:absolute;
+            left:39%;
+            top: 119%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(4) h3 {
+            position:absolute;
+            left:10%;
+            width:370px;
+            top: 100%;
+            font-size: 28px;
+            color: #000000;
+        }
+
+        .art-item:nth-child(4) p {
+            position:absolute;
+            left:39%;
+            top: 145%;
+            font-size: 15px;
+            color: #666;
+        }
+
+
+
+        .art-item:nth-child(5) h3 {
+            position:absolute;
+            width:300px;
+            left:24%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+        .art-item:nth-child(5) p {
+            position:absolute;
+            left:30%;
+            top: 115%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(6) h3 {
+            position:absolute;
+            left:37%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+
+
+        .art-item:nth-child(6) p {
+            position:absolute;
+            left:34%;
+            top: 113%;
+            font-size: 15px;
+            color: #666;
+        }
+
+
+        .art-item:nth-child(7) h3 {
+            position:absolute;
+            left:35%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+            text-align: center; /* 文本居中对齐 */
+        }
+
+        .art-item:nth-child(7) p {
+            position:absolute;
+            left:39%;
+            top: 110%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(8) h3 {
+            position:absolute;
+            left:36%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+        .art-item:nth-child(8) p {
+            position:absolute;
+            left:39%;
+            top: 110%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(9) h3 {
+            position:absolute;
+            left:37%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+
+
+        .art-item:nth-child(9) p {
+            position:absolute;
+            left:34%;
+            top: 113%;
+            font-size: 15px;
+            color: #666;
+        }
+
+
+        .art-item:nth-child(10) h3 {
+            position:absolute;
+            width:300px;
+            left:24%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+        .art-item:nth-child(10) p {
+            position:absolute;
+            left:30%;
+            top: 115%;
+            font-size: 15px;
+            color: #666;
+        }
+
+
+        .art-item:nth-child(11) h3 {
+            position:absolute;
+            left:20%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+        .art-item:nth-child(11) p {
+            position:absolute;
+            left:27%;
+            top: 108%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(12) h3 {
+            position:absolute;
+            left:36%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+        .art-item:nth-child(12) p {
+            position:absolute;
+            left:39%;
+            top: 109%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(13) h3 {
+            position:absolute;
+            left:0%;
+            top: 100%;
+            font-size: 3vw;
+            color: rgb(0, 0, 0);
+        }
+
+        .art-item:nth-child(13) h3 {
+            position:absolute;
+            left:37%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+        }
+
+
+        .art-item:nth-child(13) p {
+            position:absolute;
+            left:34%;
+            top: 113%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .art-item:nth-child(14) h3 {
+            position:absolute;
+            left:34%;
+            top: 100%;
+            font-size: 30px;
+            color: #000000;
+            text-align: center; /* 文本居中对齐 */
+        }
+
+        .art-item:nth-child(14) p {
+            position:absolute;
+            left:38%;
+            top: 110%;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .about {
+            color: #fff;
+            text-align: center;
+            position: absolute;
+            top: 983.5vw;
+            left:8vw;
+            font-size: 10px;
+            z-index:8;
+            font-family:initial;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            background: #ec3535;
+            position: absolute;
+            height:10vw;
+            width: 100%;
+            top: 980vw;
+            font-size: 15px;
+        }
+
+        .footer p{
+            position:absolute;
+            right:38.5vw;
+            top:-5vw;
+            color:#b7b7b7;
+        }
+
+
+        #monitor {
+            position: fixed;
+            top: 0.5vw;
+            right: 4vw;
+            color: #ec3535;
+            font-size: 17px;
+            z-index: 7;
+            pointer-events: none;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .header .logo {
+            position: fixed;
+            top: 0vw;
+            left: 0;
+            width: 100%;
+            height: 50px;  
+            background-color: #fff;  
+            z-index: 5; 
+            box-shadow: 0 0.3vw 0.3vw rgba(0, 0, 0, 0.2); 
+            z-index: 5; 
+        }
+        .hero p {
+            position:absolute;
+            left:1vw;
+            font-size: 15px;
+            color: lightgrey;
+        }
+        }
+
+
+                /* 日志容器样式 */
+         #log-container {
+            position: fixed; /* 固定位置 */
+            top: 0vw; /* 距离底部 */
+            right: 35%; /* 距离右侧 */
+            width: 30vw; /* 宽度 */
+            max-height: 100%; /* 最大高度 */
+            overflow-y:auto; /* 滚动条 */
+            border-radius: 8px; /* 圆角边框 */
+            padding: 10px; /* 内边距 */
+            color: #ec3535; /* 字体颜色 */
+            font-family: Arial, sans-serif; /* 字体 */
+            font-size: 5px; /* 字号 */
+            display: flex; /* 使用flexbox布局 */
+            flex-direction: column; /* 列方向排列 */
+            justify-content: flex-end; /* 确保内容靠底部排列 */
+            text-align: center;
+        }
+
+        /* 日志列表样式 */
+        #log-list {
+            margin: 0; /* 去掉默认外边距 */
+            padding: 0; /* 去掉默认内边距 */
+            list-style-type:none; /* 去掉列表项的默认样式 */
+        }
+
+        /* 单条日志样式 */
+        #log-list li {
+            margin-bottom: 5px; /* 每条日志之间的间距 */
+            line-height: 1.5; /* 行高 */
+        }
+
+        /* 按钮样式 */
+        #print-log-btn {
+            position: fixed; /* 固定位置 */
+            top: 12vw; /* 距离顶部 */
+            right: 5vw; /* 与日志容器对齐 */
+            background-color: #b0b0b0; /* 灰色背景 */
+            color: #ffffff; /* 白色文字 */
+            border: none; /* 去掉边框 */
+            border-radius: 4px; /* 圆角 */
+            padding: 15px 25px; /* 内边距 */
+            font-size: 15px; /* 字体大小 */
+            cursor: pointer; /* 鼠标悬停效果 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+            z-index:1000;
+        }
+
+        #print-log-btn:hover {
+            background-color: #a0a0a0; /* 鼠标悬停变暗 */
+        }
+
+
+
+
+
+
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="https://www.sfmoma.org/artists-artworks/" target="_blank">
+                <img src="Elements/sfmoma.png" alt="logo">
+            </a>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <h1>Collection</h1>
+            <p>Dada's TOP 5</p>
+        </section>
+        <section class="collection" id="collection">
+            <div class="collection-grid">
+                <div class="art-item">
+                    <a href="Wheel MoMA.html" target="_blank">
+                      <img src="Elements/tray blur.png" alt="Artwork 1">
+                      <h3>Bicycle Wheel</h3>
+                      <p>Marcel Duchamp 1913</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Fountain Tate.html" target="_blank">
+                     <img src="Elements/fountain2.png" alt="Artwork 2">
+                     <h3>Fountain</h3>
+                     <p>Marcel Duchamp 1917</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Karawane HOOD.html" target="_blank">
+                     <img src="Elements/hugo blur.png" alt="Artwork 3">
+                     <h3>Karawane</h3>
+                     <p>Hugo Ball 1917</p>
+                    </a> 
+                </div>
+
+                <div class="art-item">
+                    <a href="Cut Staatliche Museen zu Berlin.html" target="_blank">
+                     <img src="Elements/cuts.png" alt="Artwork 4">
+                     <h3>Cut with the Kitchen Knife Dada Through the Last Weimar Beer-Belly Cultural Epoch in Germany </h3>
+                     <p>Hannah Höch 1919</p>
+                    </a> 
+                </div>
+
+                <div class="art-item">
+                    <a href="Mechanical head Pompidou.html" target="_blank">
+                     <img src="Elements/mechanic.png" alt="Artwork 5">
+                     <h3>Mechanical head</h3>
+                     <p>Raoul Hausmann 1919-20</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Fountain Tate.html" target="_blank">
+                     <img src="Elements/fountain2.png" alt="Artwork 6">
+                     <h3>Fountain</h3>
+                     <p>Marcel Duchamp 1917</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Wheel MoMA.html" target="_blank">
+                     <img src="Elements/tray blur.png" alt="Artwork 7">
+                     <h3>Bicycle Wheel</h3>
+                     <p>Marcel Duchamp 1913</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Karawane HOOD.html" target="_blank">
+                     <img src="Elements/hugo blur.png" alt="Artwork 8">
+                     <h3>Karawane</h3>
+                     <p>Hugo Ball 1917</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Fountain Tate.html" target="_blank">
+                        <img src="Elements/fountainchaos2.png" alt="Artwork 9">
+                     <h3>Fountain</h3>
+                     <p>Marcel Duchamp 1917</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Mechanical head Pompidou.html" target="_blank">
+                     <img src="Elements/mechanic chaos.png" alt="Artwork 10">
+                     <h3>Mechanical head</h3>
+                     <p>Raoul Hausmann 1919-20</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Karawane HOOD.html" target="_blank">
+                     <img src="Elements/hugo ball.png" alt="Artwork 11">
+                     <h3>Karawane</h3>
+                     <p>Hugo Ball 1917</p>
+                    </a> 
+                </div>
+
+                <div class="art-item">
+                    <a href="Karawane HOOD.html" target="_blank">
+                     <img src="Elements/hugo chaos2.png" alt="Artwork 12">
+                     <h3>Karawane</h3>
+                     <p>Hugo Ball 1917</p>
+                    </a> 
+                </div>
+
+                <div class="art-item">
+                    <a href="Fountain Tate.html" target="_blank">
+                        <img src="Elements/fountain5.png" alt="Artwork 13">
+                     <h3>Fountain</h3>
+                     <p>Marcel Duchamp 1917</p>
+                    </a>
+                </div>
+
+                <div class="art-item">
+                    <a href="Wheel MoMA.html" target="_blank">
+                      <img src="Elements/wheel chaos.png" alt="Artwork 14">
+                      <h3>Bicycle Wheel</h3>
+                      <p>Marcel Duchamp 1913</p>
+                    </a>
+                </div>
+                
+            </div>
+        </section>
+        <section class="about" id="about">
+            <p>This is a collection of the works of Marcel Duchamp, Hugo Ball, Raoul Hausmann, and other key Dada artists.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 DaPO Collection</p>
+    </footer>
+
+
+
+    <div id="monitor">Monitoring images...</div>
+    <div id="move"></div>
+    <div id="chaos">
+        <h1> Error, please reload...
+        </h1>
+    </div>
+
+
+    <button id="print-log-btn">Print Log</button>
+
+    <script>
+        // Intersection Observer to trigger fade-in effect
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);  // Stop observing once the element is in view
+                }
+            });
+        }, { threshold: 0.3 }); 
+        
+        // Observing all .art-item elements
+        document.querySelectorAll('.art-item').forEach(item => {
+            observer.observe(item);
+        });
+        
+        let lastScrollTime = performance.now();
+        
+        window.addEventListener('scroll', () => {
+            const currentTime = performance.now();
+            const delay = Math.round(currentTime - lastScrollTime);
+            document.getElementById('delay-value').textContent = delay;
+            lastScrollTime = currentTime;
+        });
+        
+        
+        // Monitoring image position changes
+        const images = document.querySelectorAll('.art-item img');
+        let lastPositions = Array.from(images).map(img => img.getBoundingClientRect());
+        
+        // Function to track image positions and monitor changes
+        setInterval(() => {
+            images.forEach((img, index) => {
+                const currentPos = img.getBoundingClientRect();
+                const lastPos = lastPositions[index];
+        
+                // Check if position has changed
+                if (currentPos.top !== lastPos.top || currentPos.left !== lastPos.left) {
+                    img.classList.add('shake');  // Add shake effect when position changes
+        
+                    // Remove shake after animation
+                    setTimeout(() => img.classList.remove('shake'), 500);
+                    
+                    // Update last position
+                    lastPositions[index] = currentPos;
+                }
+        
+                // Update position for logging purposes
+                const distanceMoved = Math.sqrt(Math.pow(currentPos.top - lastPos.top, 2) + Math.pow(currentPos.left - lastPos.left, 2));
+                if (distanceMoved > 1) {
+                    // If moved more than 1px, show movement
+                    const positionChange = `${distanceMoved.toFixed(2)} px`;
+                    document.getElementById('monitor').textContent = `${positionChange}`;
+                }
+            });
+        }, 200);
+        
+
+
+
+        
+        const artworks = document.querySelectorAll('.art-item');
+
+        const minDuration = 0.1; 
+        const maxDuration = 1.0; 
+        const delayLimit = 50; 
+
+        window.addEventListener('scroll', () => {
+            const currentTime = performance.now();
+            const delay = Math.min(Math.round(currentTime - lastScrollTime), delayLimit);
+            lastScrollTime = currentTime;
+
+            const animationDuration = maxDuration - (Math.min(delay, delayLimit) / delayLimit) * (maxDuration - minDuration);
+
+            artworks.forEach(artwork => {
+                artwork.style.animationDuration = `${animationDuration}s`;
+                artwork.classList.add('shake');
+
+                setTimeout(() => artwork.classList.remove('shake'), animationDuration * 1000);
+            });
+        });
+
+
+
+        document.querySelectorAll('.art-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const h3 = item.querySelector('h3');
+                const p = item.querySelector('p');
+                h3.style.color = '#ec3535';
+                p.style.color = '#ff5722';
+            });
+
+            item.addEventListener('mouseleave', () => {
+                const h3 = item.querySelector('h3');
+                const p = item.querySelector('p');
+                h3.style.color = ''; 
+                p.style.color = '';
+            });
+        });
+
+
+
+        //random effect//
+        document.addEventListener("DOMContentLoaded", () => {
+            const opposingPairs = [
+                { artworkA: 9, artworkB: 2 },
+                { artworkA: 10, artworkB: 5 },
+                { artworkA: 11, artworkB: 3 },
+                { artworkA: 12, artworkB: 8 },
+                { artworkA: 13, artworkB: 6 },
+                { artworkA: 14, artworkB: 1 },
+            ];
+
+            const artworks = document.querySelectorAll(".art-item");
+            const visibleArtworks = new Set(); 
+
+            artworks.forEach((artwork, index) => {
+                const randomVisibility = Math.random() > 0.5; 
+                if (randomVisibility) {
+                    visibleArtworks.add(index + 1); 
+                } else {
+                    artwork.style.display = "none"; 
+                }
+            });
+
+            opposingPairs.forEach(pair => {
+                if (visibleArtworks.has(pair.artworkA)) {
+                    document.querySelector(`.art-item:nth-child(${pair.artworkB})`).style.display = "none";
+                    visibleArtworks.delete(pair.artworkB); // 确保不会被意外显示
+                } else if (visibleArtworks.has(pair.artworkB)) {
+                    document.querySelector(`.art-item:nth-child(${pair.artworkA})`).style.display = "none";
+                    visibleArtworks.delete(pair.artworkA);
+                }
+            });
+        });
+
+                // 日志容器和日志列表
+        const logContainer = document.createElement('div');
+        logContainer.id = 'log-container';
+        logContainer.classList.add('log-style'); // 添加样式类
+        document.body.appendChild(logContainer); // 将日志容器添加到 body 中
+
+        const logList = document.createElement('ul');
+        logList.id = 'log-list';
+        logContainer.appendChild(logList); // 将日志列表放入日志容器中
+
+        let logIndex = 1; // 初始化日志索引
+
+        // 更新图像位置变化的逻辑，加入日志功能
+        setInterval(() => {
+            images.forEach((img, index) => {
+                const currentPos = img.getBoundingClientRect();
+                const lastPos = lastPositions[index];
+
+                // 检测位置变化
+                const distanceMoved = Math.sqrt(
+                    Math.pow(currentPos.top - lastPos.top, 2) +
+                    Math.pow(currentPos.left - lastPos.left, 2)
+                );
+
+                if (distanceMoved > 1) {
+                    // 添加日志记录
+                    const logItem = document.createElement('li');
+                    logItem.textContent = `${logIndex}. Image ${index + 1} moved ${distanceMoved.toFixed(2)} px (Top: ${currentPos.top.toFixed(2)}, Left: ${currentPos.left.toFixed(2)})`;
+                    logList.appendChild(logItem);
+
+                    // 自动滚动到最新日志
+                    logList.scrollTop = logList.scrollHeight;
+
+                    // 更新日志索引
+                    logIndex++;
+
+                    // 添加动画
+                    img.classList.add('shake');
+                    setTimeout(() => img.classList.remove('shake'), 500);
+
+                    // 更新最后位置
+                    lastPositions[index] = currentPos;
+                }
+            });
+        }, 150);
+
+        // 添加打印日志功能
+        document.getElementById('print-log-btn').addEventListener('click', () => {
+            // 获取日志容器内容
+            const logContainer = document.getElementById('log-container');
+            const logs = logContainer.innerText; // 获取文本内容
+
+            // 创建 PDF
+            const { jsPDF } = window.jspdf; // 确保引入了 jsPDF 库
+            const pdf = new jsPDF();
+
+            // 设置标题
+            pdf.setFontSize(16);
+            pdf.text('Log Records', 10, 10); // 标题
+
+            // 插入日志内容
+            pdf.setFontSize(12);
+            const lineHeight = 10; // 行高
+            const lines = logs.split('\n'); // 按行分割
+            let y = 20; // 初始位置
+
+            lines.forEach((line) => {
+                pdf.text(line, 10, y); // 添加每行文本
+                y += lineHeight; // 行高递增
+            });
+
+            // 下载 PDF
+            pdf.save('log-records.pdf');
+        });
+
+
+        
+
+
+        
+    
+
+    </script>
+</body>
+</html>

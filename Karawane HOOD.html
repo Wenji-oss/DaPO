@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karawane HOOD</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+
+        body {
+            background-color: rgb(0, 0, 0); 
+            color: white; 
+        }
+
+        header {
+            position: relative;
+            padding: 2vw;
+        }
+
+        header a img {
+            position: fixed;
+            width: 8vw;
+            top: 3vw;   
+            left: 6vw;  
+        }
+
+        .container {
+            position: fixed; 
+            transform: scale(0.2) translateY(25vw); 
+            transform-origin: top left; 
+            left:5vw;
+            width: 100%; 
+            height: auto; 
+        }
+
+        .hugo.head {
+            width: 25vw;
+            height: auto;
+            position: absolute;
+            top: 15vw;
+            left: 12vw;
+            z-index: 2;
+            animation: swing 3s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        @keyframes swing {
+            0% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(30deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+            75% {
+                transform: rotate(-20deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        .hugo.body {
+            width: 80vw;
+            height: auto;
+            position: absolute;
+            top: 40vw;
+            left: -15vw;
+            z-index: 1;
+        }
+
+
+        .words {
+            width: 20vw;
+            height: auto;
+            position: absolute;
+            top: 23vw;
+            left: 22vw;
+            z-index: 1;
+            display: none;
+            background-color: #ffffff;
+            padding:2vw;
+        }
+
+        .words img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            position: relative;
+            transform: translateX(100vw);
+            opacity: 0;
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .hugo.head img, .hugo.body img, .words img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .speak-button {
+            position: fixed;
+            top: 3vw;
+            right: 7vw;
+            background-color: rgb(221, 0, 0);
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 1vw 2vw;
+            font-size: 1.5vw;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index:3;
+        }
+
+        .speak-button:hover {
+            background-color: darkgray;
+        }
+
+        .text-box {
+            position: absolute;
+            top: 20vw;
+            right: 12vw;
+            width: 35vw;
+            color: rgb(182, 182, 182);
+            padding: 1.5vw;
+            font-size: 1.3vw;
+            line-height: 1.5;
+            border-radius: 5px;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .text-box h1{
+            font-size: 1.4vw;
+            font-weight: normal;
+            color: rgb(221, 0, 0);
+        }
+
+        @keyframes slideInText {
+            to {
+                left: 50vw;
+            }
+        }
+
+        footer {
+            position: absolute;
+            top: 110vw;
+            left:0;
+            background-color: #3d3d3d;
+            color: rgb(255, 255, 255);
+            width: 100%;
+            height:15vw;
+            z-index: -2;
+        }
+
+        footer img {
+            position: absolute;
+            left: 46vw;
+            top: 3vw;
+            width: 7vw;
+            height: auto;
+            z-index: 1;
+        }
+
+        footer p {
+            position: absolute;
+            top: 7vw;
+            left: 39.5vw;
+            font-size: 1.2vw;
+            z-index: 1;
+        }
+
+        .text{
+            position:absolute;
+            top:72vw;
+            left: 22vw;
+            font-size: 1vw;
+            width:15vw;
+            color:rgb(182, 182, 182);
+        }
+        .text h{
+            font-weight: bolder;
+        }
+
+        #image-monitor {
+            position: fixed;
+            top: 3vw;
+            right: 17vw;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: rgb(221, 0, 0);
+            padding: 1vw 2vw;
+            font-size: 1.5vw;
+            border-radius: 10px;
+            z-index: 100;
+        }
+
+        /* 日志容器样式 */
+        .log-container {
+            position: fixed;
+            top: 40vw;
+            left: 4vw;
+            width: 15vw;
+            max-height: 15vw;
+            overflow-y: auto;
+            color:  rgb(221, 0, 0);
+            padding: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+        }
+
+        /* 单条日志样式 */
+        .log-item {
+            padding: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* 错误信息颜色 */
+        .log-item.error {
+            color: #f00;
+        }
+
+        /* 按钮样式 */
+        #print-log-btn {
+            position: fixed; /* 固定位置 */
+            top: 10vw; /* 距离顶部 */
+            right: 7vw; /* 与日志容器对齐 */
+            background-color: #b0b0b0; /* 灰色背景 */
+            color: #ffffff; /* 白色文字 */
+            border: none; /* 去掉边框 */
+            border-radius: 4px; /* 圆角 */
+            padding: 10px 15px; /* 内边距 */
+            font-size: 15px; /* 字体大小 */
+            cursor: pointer; /* 鼠标悬停效果 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+            z-index:1000;
+        }
+
+        #print-log-btn:hover {
+            background-color: #a0a0a0; /* 鼠标悬停变暗 */
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div id="image-monitor">Load speed: Calculating...</div>
+    <div id="log-container" class="log-container"></div>
+
+
+    <header>
+        <a href="https://www.aklein.vsfd.hoodmuseum.dartmouth.edu/karawane" target="_blank">
+            <img src="Elements/HOOD.png" alt="moma">
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="hugo head">
+            <img src="Elements/hugo ball head.png" alt="head">
+        </div>
+        <div class="hugo body">
+            <img src="Elements/hugoball body.png" alt="body">
+        </div>
+    </div>
+        <div class="words">
+            <img src="Elements/hugo1.png" alt="w1">
+            <img src="Elements/hugo2.png" alt="w2">
+            <img src="Elements/hugo3.png" alt="w3">
+            <img src="Elements/hugo4.png" alt="w4">
+            <img src="Elements/hugo5.png" alt="w5">
+            <img src="Elements/huogo6.png" alt="w6">
+            <img src="Elements/hugo7.png" alt="w7">
+            <img src="Elements/hugo8.png" alt="w8">
+            <img src="Elements/hugo9.png" alt="w9">
+            <img src="Elements/hugo10.png" alt="w10">
+            <img src="Elements/hugo11.png" alt="w11">
+            <img src="Elements/hugo12.png" alt="w12">
+            <img src="Elements/hugo13.png" alt="w13">
+        </div>
+
+        <div class="text-box" id="text-box">
+            <h1>Karawane</h1>
+            Karawane is a poem by Hugo Ball, originally performed in the Cabaret Voltaire, Zurich in 1916. The printed version was later published in the Dada Almanach, as Ball´s performance can be seen as one of the key moments in the development of Dada. The artist comes from a literature and theater background and reinvented language without meaning or grammar, also known as Lautsprache. During his performance he was dressed in a paper costume, resembling a clerical member. His recitation of the poem on stage lead to a trance like state of his mind, with the audience captivated. At the end he had to be carried of stage, due to exhaustion, with the audience climbing up on it.
+            <br><br>The typeface and text design of the printed version of Karawane underline these features of chaos and anarchy. Ball´s design is simple, easy to reproduced and clear to read, while still creating a disharmony due to the seemingly random chosen typefaces. The design also closely resembles the visual qualities of a pamphlet, due to its suppleness, indicating an easy reproduction and distribution.
+        </div>
+
+        <button class="speak-button" onclick="handleSpeakButton()">Speak</button>
+
+        <div class="text">Hugo Ball, German, 1886 - 1927<br><br>
+            <h>Karawane</h>
+            <p>1917; published 1920
+                Ink on paper
+                Erich Reiss Verlag
+                Source: Dada Almanach. Berlin: Erich Reiss Verlag</p>
+        </div>
+
+
+        
+
+        <footer>
+            <a href="https://www.aklein.vsfd.hoodmuseum.dartmouth.edu/karawane">
+                <img src="Elements/HOOD2.png" alt="Tate logo">
+            </a>
+            <p>Copyright © 2024 DaPO Collection</p>
+        </footer>
+
+        <button id="print-log-btn">Print Log</button>
+    
+
+
+
+        <script>
+            let isPlaying = false; 
+            let loadTime = 0; 
+            const audio = new Audio('Elements/Hugo poem.m4a'); 
+            audio.loop = true;
+
+            function handleSpeakButton() {
+                const words = document.querySelector('.words');
+                const images = words.querySelectorAll('img');
+                
+                if (!isPlaying) {
+                    audio.play();
+                    isPlaying = true;
+
+                    words.style.display = 'block';
+                    images.forEach((img, index) => {
+                        img.style.animation = `slideIn 1s ease-out forwards`;
+                        img.style.animationDelay = `${index * 0.2}s`;
+                    });
+
+                } else {
+                    audio.pause();
+                    isPlaying = false;
+                }
+            }
+
+            function monitorImageLoadSpeed(selector) {
+                const images = document.querySelectorAll(selector + ' img');
+                const monitor = document.getElementById('image-monitor');
+                let imagesLoaded = 0;
+                const totalImages = images.length;
+
+                images.forEach(image => {
+                    const startTime = performance.now();
+
+                    image.onload = () => {
+                        const endTime = performance.now();
+                        loadTime = endTime - startTime;
+
+                        imagesLoaded++;
+                        logMessage(`Image ${image.src} loaded in ${loadTime.toFixed(2)} ms`);
+
+                        if (loadTime > 500) {
+                            logMessage(`Image ${image.src} took too long to load`, 'error');
+                        }
+
+                        if (imagesLoaded === totalImages) {
+                            adjustAudioAndAnimationSpeed();
+                        }
+
+                        monitor.textContent = `Load Speed: ${loadTime.toFixed(0)} ms`;
+                        monitor.style.display = 'block'; // 显示监控信息
+                    };
+
+                    image.onerror = () => {
+                        logMessage(`Failed to load image: ${image.src}`, 'error');
+                    };
+                });
+            }
+
+            function adjustAudioAndAnimationSpeed() {
+                const head = document.querySelector('.hugo.head');
+
+                if (loadTime < 10) {
+                    audio.playbackRate = 0.5;
+                    head.style.animationDuration = '5s';
+                } else if (loadTime > 10) {
+                    audio.playbackRate = 1.5;
+                    head.style.animationDuration = '1.5s';
+                } else {
+                    audio.playbackRate = 1;
+                    head.style.animationDuration = '3s';
+                }
+            }
+
+            function logMessage(message, type = '') {
+                const logContainer = document.getElementById('log-container');
+                const logItem = document.createElement('div');
+                logItem.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                logItem.className = `log-item ${type}`;
+                logContainer.appendChild(logItem);
+
+                // 自动滚动到最新信息
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+
+            // 监控图片加载速度
+            monitorImageLoadSpeed('.container');
+            monitorImageLoadSpeed('.words');
+            monitorImageLoadSpeed('header');
+
+            
+
+            // 添加打印日志功能
+            document.getElementById('print-log-btn').addEventListener('click', () => {
+                // 获取日志容器内容
+                const logContainer = document.getElementById('log-container');
+                const logs = logContainer.innerText; // 获取文本内容
+
+                // 创建 PDF
+                const { jsPDF } = window.jspdf; // 确保引入了 jsPDF 库
+                const pdf = new jsPDF();
+
+                // 设置标题
+                pdf.setFontSize(16);
+                pdf.text('Log Records', 10, 10); // 标题
+
+                // 插入日志内容
+                pdf.setFontSize(12);
+                const lineHeight = 10; // 行高
+                const lines = logs.split('\n'); // 按行分割
+                let y = 20; // 初始位置
+
+                lines.forEach((line) => {
+                    pdf.text(line, 10, y); // 添加每行文本
+                    y += lineHeight; // 行高递增
+                });
+
+                // 下载 PDF
+                pdf.save('log-records.pdf');
+            });
+
+                        
+
+
+
+        </script>
+        
+</body>
+</html>
